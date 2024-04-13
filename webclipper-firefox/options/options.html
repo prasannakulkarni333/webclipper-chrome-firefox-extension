@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<!--
+    Options page.
+-->
+
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="options.css"/>
+  </head>
+
+  <body>
+
+    <p>The target URL can be configured here, where the placeholders '{URL}'
+    and '{TITLE}' will be replaced with the current tab's URL and title. The
+    placeholders <em>must</em> be uppercase with curly-braces, exactly as shown.
+    The configured target URL is otherwise passed 'as-is' in the request, so
+    you can include extra parameters if needed.</p>
+
+    <form>
+        <table id="targetUrls" style="width:100%">
+            <tr>
+              <th><label>Name</label></th>
+              <th><label>Target URL</label></th>
+            </tr>
+            <tr id="targetUrl0">
+              <td id="target0" style="width:20%">
+                <input
+                  id="name0"
+                  type="text"
+                  placeholder="myserver"
+                  style="width:100%"/>
+              </td>
+              <td>
+                <input
+                  id="url0"
+                  type="text"
+                  placeholder="e.g. https://example.com/store.php?p={URL}"
+                  style="width:100%"/>
+              </td>
+            </tr>
+            <tr id="save-button-row">
+              <th colspan="2"><button id="save-button" type="button">Save</button></th>
+            </tr>
+        </table>
+        <table style="width:100%">
+            <tr>
+                <td><span id="message1"></span></td>
+            </tr>
+        </table>
+    </form>
+
+    <p> By default, URLs are submitted to the CFS survey server and taken as
+    candidates for inclusion in the Commerce Filtered Search index. You can,
+    however, change this behaviour to send to any server you like. Your handler
+    should comply with the CORS protocol, e.g. by setting the response header
+    <code>Access-Control-Allow-Origin "*"</code> in the handler for this
+    request.  </p>
+
+    <ul style="list-style-type: none">
+        <lh><strong>Examples</strong></lh>
+        <li>https://www.example.com/store_link/?url={URL}&amp;title={TITLE}</li>
+        <li>https://www.example.com/store_link/?p={URL}&amp;myparam=myvalue</li>
+        <li>https://wwww.twitbook.uk/store_url.php?p={URL}&amp;t={TITLE}&amp;token=default</li>
+    </ul>
+
+    <script src="options.js"></script>
+  </body>
+</html>
+

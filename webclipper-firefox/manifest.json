@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "MangoBlogger - Send Tab URL",
+  "version": "0.1",
+  "description": "Send URL to MangoBlogger",
+  "homepage_url": "https://gitlab.com/ksangeelee/send-tab-url",
+  "icons": {
+    "48": "icons/tag-plus-outline.svg",
+    "96": "icons/tag-plus-outline.svg"
+  },
+  "permissions": [
+    "activeTab",
+    "storage",
+    "webNavigation",
+    "tabs",
+    "cookies"
+  ],
+  "options_ui": {
+    "page": "options/options.html"
+  },
+  "background": {
+    "scripts": [
+      "config.js"
+    ]
+  },
+  "host_permissions": [
+    "<all_urls>"
+  ]
+}
