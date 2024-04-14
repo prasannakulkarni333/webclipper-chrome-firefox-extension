@@ -23,7 +23,9 @@ On clicking the extension icon, there will be two tabs.
     - `api_key` : user's api key
     - `title` : title of the page
     - `association` : "ToRead"
+  
 and **star the current page with below parameters**
+
     - `taburl` : current tab URL
     - `api_key` : user's api key
     - `title` : title of the page
