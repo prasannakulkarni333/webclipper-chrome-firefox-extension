@@ -163,3 +163,23 @@ browser.tabs.query({
     })
     .catch(console.log);
 
+document.addEventListener("DOMContentLoaded", function() {
+  var submitButton = document.getElementById("id_api_btn");
+  var apiInput = document.getElementById("id_api");
+  var statusDiv = document.getElementById("id_api_status");
+
+  submitButton.addEventListener("click", function() {
+    var apiValue = apiInput.value;
+    
+    // Store user data
+    browser.storage.local.set({ "apiKey": apiValue }).then(() => {
+      statusDiv.textContent = "Data saved!";
+      apiInput.value = ""
+      
+    //   // Send message to background script to initiate API call
+    //   browser.runtime.sendMessage({ action: "sendDataToAPI" });
+    }).catch(error => {
+      statusDiv.textContent = "Error saving data: " + error.message;
+    });
+  });
+});

@@ -83,14 +83,25 @@ function AutoSentCurrentTabUrl(tabUrl, pageTitle, customUrl) {
         .replace('{TITLE}', encodeURIComponent(pageTitle))
         .replace('{URL}', encodeURIComponent(tabUrl));
 
-    fetch(requestUrl,
-        {
-            method: 'GET',
-            mode: 'no-cors', // no-cors, *cors, same-origin. See Request.mode
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'omit', // include, *same-origin, omit
+    var apiKey;
+    browser.storage.local.get("apiKey").then(data => {
+        apiKey = data.apiKey;
+        let requestData = {
+            "taburl" : tabUrl,
+            "api_key" : apiKey,
+            "title" : pageTitle,
+            "association" : "Pages Visited"
         }
-    )
+
+        fetch(requestUrl,
+            {
+                method: 'POST',
+                mode: 'no-cors', // no-cors, *cors, same-origin. See Request.mode
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'omit', // include, *same-origin, omit
+                body: JSON.stringify(requestData)
+            }
+        )
         .then((response) => {
 
             console.log('Response: ', response);
@@ -99,6 +110,10 @@ function AutoSentCurrentTabUrl(tabUrl, pageTitle, customUrl) {
             //  messageElement().innerText = 'Failed to send. ' + err;
             console.log('Error: ', err)
         });
+
+    }).catch(error => {
+    console.error("Error retrieving data:", error);
+    });
 }
 browser.webNavigation.onCompleted.addListener((details) => {
 
@@ -129,7 +144,7 @@ browser.webNavigation.onCompleted.addListener((details) => {
     });
     console.error('sanitisedUrl ', sanitisedUrl);
     console.log('pageTitle asdfasdf', pageTitle,);
-    AutoSentCurrentTabUrl(sanitisedUrl, pageTitle, "{defaultUrl}?page={URL}&API_KEY={api-key}");
+    AutoSentCurrentTabUrl(sanitisedUrl, pageTitle, `${defaultUrl}?page={URL}&API_KEY={api-key}`);
 });
 
 

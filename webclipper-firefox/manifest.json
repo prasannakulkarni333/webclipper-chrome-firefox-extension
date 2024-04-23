@@ -23,6 +23,14 @@
       "config.js"
     ]
   },
+  "action": {
+    "default_popup": "popup/settings.html",
+    "default_icon": {
+      "16": "icons/send-tab-url-icon.png",
+      "48": "icons/send-tab-url-icon.png",
+      "128": "icons/send-tab-url-icon.png"
+    }
+  },
   "host_permissions": [
     "<all_urls>"
   ]
