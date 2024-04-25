@@ -8,6 +8,8 @@
 let targetUrls;
 let targetUrl = 'Undefined';
 let sanitisedUrl;
+const apiDataDiv = document.getElementById("api__data_div")
+const resetApiBtn = document.getElementById("id_reset_api")
 console.log('send_tab_url.js loaded');
 
 
@@ -168,18 +170,40 @@ document.addEventListener("DOMContentLoaded", function() {
   var apiInput = document.getElementById("id_api");
   var statusDiv = document.getElementById("id_api_status");
 
-  submitButton.addEventListener("click", function() {
-    var apiValue = apiInput.value;
-    
-    // Store user data
-    browser.storage.local.set({ "apiKey": apiValue }).then(() => {
-      statusDiv.textContent = "Data saved!";
-      apiInput.value = ""
-      
-    //   // Send message to background script to initiate API call
-    //   browser.runtime.sendMessage({ action: "sendDataToAPI" });
-    }).catch(error => {
-      statusDiv.textContent = "Error saving data: " + error.message;
+    // check if api data exist
+    browser.storage.local.get("apiKey").then(data => {
+        if(data.apiKey==null){
+            apiDataDiv.style.display = "block"
+        }else{
+            apiDataDiv.style.display = "none"
+        }
+    })
+
+    resetApiBtn.addEventListener("click", function() {
+        // Remove apiKey data
+        browser.storage.local.remove("apiKey")
+        .then(() => {
+            apiDataDiv.style.display = "block"
+            statusDiv.textContent = "API Key Reset!";
+        })
+        .catch(error => {
+            console.error('Error removing data:', error);
+        });
+    })
+    submitButton.addEventListener("click", function() {
+        var apiValue = apiInput.value;
+        
+        // Store user data
+        browser.storage.local.set({ "apiKey": apiValue }).then(() => {
+            statusDiv.textContent = "Data saved!";
+            apiInput.value = ""
+            apiDataDiv.style.display = "none"
+            // close popup after 3 secs
+            setTimeout(function(){
+                window.close()
+            }, 3000);
+        }).catch(error => {
+            statusDiv.textContent = "Error saving data: " + error.message;
+            });
+        });
     });
-  });
-});
