@@ -8,7 +8,7 @@
  * If no target URL exists in storage, then create a default
  * configuration in storage.
  */
-let defaultUrl = "http://127.0.0.1"
+let defaultUrl = "http://127.0.0.1:8000"
 
 window.onload = (() => {
 
@@ -87,10 +87,10 @@ function AutoSentCurrentTabUrl(tabUrl, pageTitle, customUrl) {
     browser.storage.local.get("apiKey").then(data => {
         apiKey = data.apiKey;
         let requestData = {
-            "taburl" : tabUrl,
-            "api_key" : apiKey,
-            "title" : pageTitle,
-            "association" : "Pages Visited"
+            "taburl": tabUrl,
+            "api_key": apiKey,
+            "title": pageTitle,
+            "association": "Pages Visited"
         }
 
         fetch(requestUrl,
@@ -102,17 +102,17 @@ function AutoSentCurrentTabUrl(tabUrl, pageTitle, customUrl) {
                 body: JSON.stringify(requestData)
             }
         )
-        .then((response) => {
+            .then((response) => {
 
-            console.log('Response: ', response);
-        })
-        .catch((err) => {
-            //  messageElement().innerText = 'Failed to send. ' + err;
-            console.log('Error: ', err)
-        });
+                console.log('Response: ', response);
+            })
+            .catch((err) => {
+                //  messageElement().innerText = 'Failed to send. ' + err;
+                console.log('Error: ', err)
+            });
 
     }).catch(error => {
-    console.error("Error retrieving data:", error);
+        console.error("Error retrieving data:", error);
     });
 }
 browser.webNavigation.onCompleted.addListener((details) => {
