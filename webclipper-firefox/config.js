@@ -1,21 +1,11 @@
-/**
- * (C)2020 Kevin Sangeelee, released under the GNU GPLv2
- * https://gitlab.com/ksangeelee/send-tab-url/tree/master
- * See the above project for license terms.
- */
 
-/*
- * If no target URL exists in storage, then create a default
- * configuration in storage.
- */
-let defaultUrl = "http://127.0.0.1:8000"
+let defaultUrl = "http://127.0.0.1:8000/accounts/profile/api"
 
 window.onload = (() => {
 
     const defaultUrls = [
-        { name: 'send to save to reading', url: '{defaultUrl}?url={URL}&mangoblogger_points=5&tags=toread&status=toread' },
-        { name: 'star the page', url: '{defaultUrl}?url={URL}&mangoblogger_points=5' },
-
+        { name: 'send to save to reading', url: `${defaultUrl}?url={URL}&mangoblogger_points=5&tags=toread&status=toread` },
+        { name: 'star the page', url: `${defaultUrl}?url={URL}&mangoblogger_points=5` },
     ];
 
     let options = { targetUrls: defaultUrls };
@@ -46,38 +36,14 @@ window.onload = (() => {
 let targetUrls;
 let targetUrl = 'Undefined';
 let sanitisedUrl;
-// let api_key = browser.cookies.get({ url: "https://mangoblogger.com", name: "API_KEY" });
-
-
-function getCookies() {
-
-    let cookies2 = browser.cookies.getAll({ url: "https://mangoblogger.com" }).then((cookies) => {
-        console.log("loggong cookies", cookies);
-
-    });
-
-    let cookies3 = browser.cookies.getAll({ url: "http://127.0.0.1" }).then((cookies2) => {
-        console.log("loggong cookies", cookies2);
-
-    });
-    browser.cookies.get({ name: ".mangoblogger.com", url: "https://mangoblogger.com" }).then((cookies) => {
-        console.log("loggong cookies et", cookies);
-
-    });
-}
-
-getCookies();
-
 
 
 function messageElement() {
     return document.querySelector("#message-content");
 }
 
-function AutoSentCurrentTabUrl(tabUrl, pageTitle, customUrl) {
+function AutoSentCurrentTabUrl(tabUrl, pageTitle, targetUrl) {
 
-    let targetUrl = customUrl;
-    console.error('Sending: ', tabUrl, 'via', targetUrl);
 
     let requestUrl = targetUrl
         .replace('{TITLE}', encodeURIComponent(pageTitle))
@@ -93,6 +59,7 @@ function AutoSentCurrentTabUrl(tabUrl, pageTitle, customUrl) {
             "association": "Pages Visited"
         }
 
+        console.error('Sending: ', requestData.taburl, 'via', targetUrl);
         fetch(requestUrl,
             {
                 method: 'POST',
@@ -115,37 +82,45 @@ function AutoSentCurrentTabUrl(tabUrl, pageTitle, customUrl) {
         console.error("Error retrieving data:", error);
     });
 }
-browser.webNavigation.onCompleted.addListener((details) => {
 
-    function getCookies() {
-
-        let cookies2 = browser.cookies.getAll({ url: "{defaultUrl}" }).then((cookies) => {
-            console.log("loggong cookies", cookies);
-
-        });
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status === 'complete' && tab.active) {
+        let openUrl = tab.url;
+        console.log('tab loaded', tab.url);
+        const url = new URL(openUrl);
+        url.hash = '';
+        url.password = '';
+        url.username = '';
+        sanitisedUrl = url.href;
+        let pageTitle = tab.title;
+        AutoSentCurrentTabUrl(sanitisedUrl, pageTitle, `${defaultUrl}?page={URL}&API_KEY={api-key}`);
     }
-
-    getCookies();
-
-    let openUrl = details.url;
-
-    const url = new URL(openUrl);
-    //console.log(url);
-    console.log('tab details ', details);
-    url.hash = '';
-    url.password = '';
-    url.username = '';
-    sanitisedUrl = url.href;
-    let pageTitle = details.title;
-
-    browser.tabs.query({ currentWindow: true }, function (tabs) {
-
-
-    });
-    console.error('sanitisedUrl ', sanitisedUrl);
-    console.log('pageTitle asdfasdf', pageTitle,);
-    AutoSentCurrentTabUrl(sanitisedUrl, pageTitle, `${defaultUrl}?page={URL}&API_KEY={api-key}`);
 });
+
+
+
+// below piece of code will send all the links loaded to the server on the page like tracking scripts etc.
+// browser.webNavigation.onCompleted.addListener((details) => {
+
+//     let openUrl = details.url;
+
+//     const url = new URL(openUrl);
+//     //console.log(url);
+//     console.log('all details ', details);
+//     url.hash = '';
+//     url.password = '';
+//     url.username = '';
+//     sanitisedUrl = url.href;
+//     let pageTitle = details.title;
+
+//     browser.tabs.query({ currentWindow: true }, function (tabs) {
+
+
+//     });
+//     console.error('sanitisedUrl ', sanitisedUrl);
+//     console.log('pageTitle asdfasdf', pageTitle,);
+//     AutoSentCurrentTabUrl(sanitisedUrl, pageTitle, `${defaultUrl}?page={URL}&API_KEY={api-key}`);
+// });
 
 
 
