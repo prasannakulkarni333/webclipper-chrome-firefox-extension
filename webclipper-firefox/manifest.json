@@ -21,7 +21,7 @@
     ]
   },
   "action": {
-    "default_popup": "popup/send_tab_url.html",
+    "default_popup": "popup/settings.html",
     "default_icon": {
       "16": "icons/send-tab-url-icon.png",
       "48": "icons/send-tab-url-icon.png",

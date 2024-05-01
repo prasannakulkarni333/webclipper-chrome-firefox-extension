@@ -1,5 +1,5 @@
 
-let defaultUrl = "http://127.0.0.1:8000/accounts/profile/api"
+let defaultUrl = "http://127.0.0.1:8000/accounts/profile/api/"
 
 window.onload = (() => {
 
@@ -43,12 +43,6 @@ function messageElement() {
 }
 
 function AutoSentCurrentTabUrl(tabUrl, pageTitle, targetUrl) {
-
-
-    let requestUrl = targetUrl
-        .replace('{TITLE}', encodeURIComponent(pageTitle))
-        .replace('{URL}', encodeURIComponent(tabUrl));
-
     var apiKey;
     browser.storage.local.get("apiKey").then(data => {
         apiKey = data.apiKey;
@@ -58,8 +52,12 @@ function AutoSentCurrentTabUrl(tabUrl, pageTitle, targetUrl) {
             "title": pageTitle,
             "association": "Pages Visited"
         }
+        let requestUrl = targetUrl
+            .replace('{TITLE}', encodeURIComponent(pageTitle))
+            .replace('{URL}', encodeURIComponent(tabUrl))
+            .replace('{api-key}', encodeURIComponent(apiKey));
 
-        console.error('Sending: ', requestData.taburl, 'via', targetUrl);
+        console.error('Sending: ', tabUrl, 'via', requestUrl, 'with', requestData.api_key, 'and', requestData.title);
         fetch(requestUrl,
             {
                 method: 'POST',
@@ -86,43 +84,15 @@ function AutoSentCurrentTabUrl(tabUrl, pageTitle, targetUrl) {
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status === 'complete' && tab.active) {
         let openUrl = tab.url;
-        console.log('tab loaded', tab.url);
         const url = new URL(openUrl);
         url.hash = '';
         url.password = '';
         url.username = '';
-        sanitisedUrl = url.href;
+        taburl = url.href;
         let pageTitle = tab.title;
-        AutoSentCurrentTabUrl(sanitisedUrl, pageTitle, `${defaultUrl}?page={URL}&API_KEY={api-key}`);
+        AutoSentCurrentTabUrl(taburl, pageTitle, `${defaultUrl}?page={URL}&API_KEY={api-key}`);
     }
 });
-
-
-
-// below piece of code will send all the links loaded to the server on the page like tracking scripts etc.
-// browser.webNavigation.onCompleted.addListener((details) => {
-
-//     let openUrl = details.url;
-
-//     const url = new URL(openUrl);
-//     //console.log(url);
-//     console.log('all details ', details);
-//     url.hash = '';
-//     url.password = '';
-//     url.username = '';
-//     sanitisedUrl = url.href;
-//     let pageTitle = details.title;
-
-//     browser.tabs.query({ currentWindow: true }, function (tabs) {
-
-
-//     });
-//     console.error('sanitisedUrl ', sanitisedUrl);
-//     console.log('pageTitle asdfasdf', pageTitle,);
-//     AutoSentCurrentTabUrl(sanitisedUrl, pageTitle, `${defaultUrl}?page={URL}&API_KEY={api-key}`);
-// });
-
-
 
 
 
