@@ -1,5 +1,5 @@
 
-let defaultUrl = "http://127.0.0.1:8000/accounts/profile/api/"
+let defaultUrl = "https://mangoblogger.com/accounts/profile/api/"
 
 window.onload = (() => {
 
@@ -47,8 +47,8 @@ function AutoSentCurrentTabUrl(tabUrl, pageTitle, targetUrl) {
     browser.storage.local.get("apiKey").then(data => {
         apiKey = data.apiKey;
         let requestData = {
-            "taburl": tabUrl,
-            "api_key": apiKey,
+            "page": tabUrl,
+            "API_KEY": apiKey,
             "title": pageTitle,
             "association": "Pages Visited"
         }
@@ -57,11 +57,11 @@ function AutoSentCurrentTabUrl(tabUrl, pageTitle, targetUrl) {
             .replace('{URL}', encodeURIComponent(tabUrl))
             .replace('{api-key}', encodeURIComponent(apiKey));
 
-        console.error('Sending: ', tabUrl, 'via', requestUrl, 'with', requestData.api_key, 'and', requestData.title);
+        console.error('Sending: ', tabUrl, 'via', requestUrl, 'with', requestData.API_KEY, 'and', requestData.title);
         fetch(requestUrl,
             {
                 method: 'POST',
-                mode: 'no-cors', // no-cors, *cors, same-origin. See Request.mode
+                mode: 'cors', // no-cors, *cors, same-origin. See Request.mode
                 cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
                 credentials: 'omit', // include, *same-origin, omit
                 body: JSON.stringify(requestData)
