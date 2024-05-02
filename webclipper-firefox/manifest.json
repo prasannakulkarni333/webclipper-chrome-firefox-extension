@@ -1,17 +1,18 @@
 {
   "manifest_version": 3,
   "name": "Webclipper",
-  "version": "0.1",
+  "version": "0.11",
   "browser_specific_settings": {
     "gecko": {
       "id": "webclipper@mangoblogger.com"
     }
   },
-  "description": "Send URL to MangoBlogger",
-  "homepage_url": "https://mangoblogger.com/apps/webclipper",
+  "description": "Keep a history of URLs you browse all the time or sometimes during a research project. Save URLs you browse automatically to your profile on https://mangoblogger.com/accounts/profile. You can access them from anywhere, anytime from a web browser.",
+  "homepage_url": "https://mangoblogger.com/apps/webclipper/",
   "icons": {
-    "48": "icons/tag-plus-outline.svg",
-    "96": "icons/tag-plus-outline.svg"
+    "16": "icons/send-tab-url-icon.png",
+    "48": "icons/send-tab-url-icon.png",
+    "128": "icons/send-tab-url-icon.png"
   },
   "permissions": [
     "activeTab",

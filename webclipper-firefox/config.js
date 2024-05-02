@@ -1,12 +1,12 @@
 
-// let defaultUrl = "https://mangoblogger.com/accounts/profile/api/"
-let defaultUrl = "http://127.0.0.1:8000/accounts/profile/api/"
+let defaultUrl = "https://mangoblogger.com/accounts/profile/api/"
+// let defaultUrl = "http://127.0.0.1:8000/accounts/profile/api/"
 
 window.onload = (() => {
 
     const defaultUrls = [
-        { name: 'send 2to save to reading', url: `${defaultUrl}?url={URL}&mangoblogger_points=5&tags=toread&status=toread` },
-        { name: 'star the page', url: `${defaultUrl}?url={URL}&mangoblogger_points=5` },
+        { name: 'Save for reading later', url: `${defaultUrl}?url={URL}&mangoblogger_points=5&association_type=toread` },
+        { name: 'Star the page', url: `${defaultUrl}?url={URL}&association_type=starred` },
     ];
 
     let options = { targetUrls: defaultUrls };
@@ -95,6 +95,19 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     }
 });
 
+// browser.runtime.onInstalled.addListener(async ({ reason, temporary }) => {
+//     if (temporary) return; // skip during development
+//     switch (reason) {
+//         case "install":
+//             {
+//                 const url = browser.runtime.getURL("views/installed.html");
+//                 await browser.tabs.create({ url });
+//                 // or: await browser.windows.create({ url, type: "popup", height: 600, width: 600, });
+//             }
+//             break;
+//         // see below
+//     }
+// });
 
 
 

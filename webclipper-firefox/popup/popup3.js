@@ -3,6 +3,7 @@ let targetUrls;
 let targetUrl = 'Undefined';
 let sanitisedUrl;
 const apiDataDiv = document.getElementById("api__data_div")
+// const apiDataDiv = document.getElementById("tohide")
 const resetApiBtn = document.getElementById("id_reset_api")
 console.log('popup3.js loaded');
 
@@ -171,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Store user data
         browser.storage.local.set({ "apiKey": apiValue }).then(() => {
-            statusDiv.textContent = "Data saved!";
+            statusDiv.textContent = "Data saved! You can now use the add-on.";
             apiInput.value = ""
             apiDataDiv.style.display = "none"
             // close popup after 3 secs
