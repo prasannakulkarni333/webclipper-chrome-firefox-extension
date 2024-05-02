@@ -4,8 +4,7 @@ let targetUrl = 'Undefined';
 let sanitisedUrl;
 const apiDataDiv = document.getElementById("api__data_div")
 const resetApiBtn = document.getElementById("id_reset_api")
-console.log('send_tab_url.js loaded');
-
+console.log('popup3.js loaded');
 
 function messageElement() {
     return document.querySelector("#message-content");
@@ -14,7 +13,7 @@ function messageElement() {
 function sendCurrentTabUrl(tabUrl, pageTitle, button) {
 
     let targetUrl = button.dataset.url;
-    console.log('Sending the tab: ', tabUrl, 'via', targetUrl);
+    console.log('Sending: ', tabUrl, 'via', targetUrl);
 
     /*
      * Make a request to send the URL. Server should support CORS (i.e.
@@ -23,7 +22,7 @@ function sendCurrentTabUrl(tabUrl, pageTitle, button) {
      */
 
     messageElement().classList.remove("hidden");
-    messageElement().innerText = "Sending...";
+    messageElement().innerText = "Sent...";
 
     button.setAttribute('disabled', true);
 
@@ -32,17 +31,15 @@ function sendCurrentTabUrl(tabUrl, pageTitle, button) {
      * to the target server. The tokens {URL} and {TITLE} will be
      * replaced by the URL and title of the tab. The values MUST
      * be encoded.
-     * https://stackoverflow.com/questions/12893981/logging-to-console-from-firefox-extension
      */
     let requestUrl = targetUrl
         .replace('{TITLE}', encodeURIComponent(pageTitle))
         .replace('{URL}', encodeURIComponent(tabUrl));
 
-
     fetch(requestUrl,
         {
             method: 'POST',
-            mode: 'no-cors', // no-cors, *cors, same-origin. See Request.mode
+            mode: 'cors', // no-cors, *cors, same-origin. See Request.mode
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             credentials: 'omit', // include, *same-origin, omit
         }
@@ -61,10 +58,15 @@ function sendCurrentTabUrl(tabUrl, pageTitle, button) {
             }
         })
         .catch((err) => {
-            messageElement().innerText = 'Failed to send. ' + err;
+            // messageElement().innerText = 'Failed to send. ' + err;
             console.log('Error: ', err)
         });
-}
+} /* end function sendTabUrl() */
+
+/**
+ * Listen for clicks on the buttons, and send the appropriate message to
+ * the content script in the page.
+ */
 function listenForClicks() {
 
     document.addEventListener("click", (e) => {
@@ -78,9 +80,39 @@ function listenForClicks() {
 
             sendCurrentTabUrl(sanitisedUrl, pageTitle, e.target);
         }
-
     });
 }
+
+/**
+ * Fetch the targetUrl configuration from storage.
+ */
+browser.storage.local.get()
+    .then((config) => {
+
+        if (config.hasOwnProperty('targetUrls') && Array.isArray(config.targetUrls)) {
+
+            targetUrls = config.targetUrls;
+            for (idx = 0; idx < 3; idx++) {
+                let t = targetUrls[idx];
+                let button = document.getElementById('send-button' + idx);
+
+                let disabled = (t.name != '' && t.url != '') ? false : true;
+
+                if (disabled) {
+                    button.setAttribute('disabled', true);
+                    button.innerText = 'Empty';
+                    button.dataset.url = '';
+                } else {
+                    button.removeAttribute('disabled');
+                    button.innerText = 'Send to ' + t.name;
+                    button.dataset.url = t.url;
+                }
+            }
+
+        }
+    });
+
+
 
 
 browser.tabs.query({
@@ -145,9 +177,11 @@ document.addEventListener("DOMContentLoaded", function () {
             // close popup after 3 secs
             setTimeout(function () {
                 window.close()
-            }, 3000);
+            }, 30000);
         }).catch(error => {
             statusDiv.textContent = "Error saving data: " + error.message;
         });
     });
 });
+
+

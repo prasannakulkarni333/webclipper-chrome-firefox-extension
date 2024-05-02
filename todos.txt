@@ -1,0 +1,4 @@
+- Onboarding page (by creating the steps on the add on homepage)
+- add on homepage
+- Smoother adding API and step by step updating of the popoup page. 1. create account and add api. 2. send and reset
+- save the page to read - add the page to your own search list
