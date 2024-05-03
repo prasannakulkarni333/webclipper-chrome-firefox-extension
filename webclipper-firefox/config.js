@@ -1,12 +1,12 @@
 
-let defaultUrl = "https://mangoblogger.com/accounts/profile/api/"
-// let defaultUrl = "http://127.0.0.1:8000/accounts/profile/api/"
+// let defaultUrl = "https://mangoblogger.com/accounts/profile/api/"
+let defaultUrl = "http://127.0.0.1:8000/accounts/profile/api/"
 
 window.onload = (() => {
 
     const defaultUrls = [
-        { name: 'Save for reading later', url: `${defaultUrl}?url={URL}&mangoblogger_points=5&association_type=toread` },
-        { name: 'Star the page', url: `${defaultUrl}?url={URL}&association_type=starred` },
+        { name: 'Save for reading later', url: `${defaultUrl}?url={URL}&association_type=toread&API_KEY={api-key}` },
+        { name: 'Star the page', url: `${defaultUrl}?url={URL}&association_type=starred&API_KEY={api-key}` },
     ];
 
     let options = { targetUrls: defaultUrls };

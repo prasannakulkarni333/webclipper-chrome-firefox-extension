@@ -11,16 +11,21 @@ function messageElement() {
     return document.querySelector("#message-content");
 }
 
+
 function sendCurrentTabUrl(tabUrl, pageTitle, button) {
+    var apiKey;
+    apiKey = browser.storage.local.get("apiKey").then(data => {
+        return data.apiKey;
+    });
 
     let targetUrl = button.dataset.url;
-    console.log('Sending: ', tabUrl, 'via', targetUrl);
+
 
     /*
-     * Make a request to send the URL. Server should support CORS (i.e.
-     * include response header Access-Control-Allow-Origin), otherwise firefox
-     * prevents our code from accessing the response.
-     */
+    * Make a request to send the URL. Server should support CORS (i.e.
+    * include response header Access-Control-Allow-Origin), otherwise firefox
+    * prevents our code from accessing the response.
+    */
 
     messageElement().classList.remove("hidden");
     messageElement().innerText = "Sent...";
@@ -28,14 +33,17 @@ function sendCurrentTabUrl(tabUrl, pageTitle, button) {
     button.setAttribute('disabled', true);
 
     /*
-     * The targetUrl is the template that's used in the GET request
-     * to the target server. The tokens {URL} and {TITLE} will be
-     * replaced by the URL and title of the tab. The values MUST
-     * be encoded.
-     */
+    * The targetUrl is the template that's used in the GET request
+    * to the target server. The tokens {URL} and {TITLE} will be
+    * replaced by the URL and title of the tab. The values MUST
+    * be encoded.
+    */
     let requestUrl = targetUrl
         .replace('{TITLE}', encodeURIComponent(pageTitle))
-        .replace('{URL}', encodeURIComponent(tabUrl));
+        .replace('{URL}', encodeURIComponent(tabUrl))
+        .replace('{api-key}', encodeURIComponent(apiKey));
+
+    console.log('Sending222: ', tabUrl, 'via', requestUrl);
 
     fetch(requestUrl,
         {
