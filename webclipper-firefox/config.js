@@ -1,6 +1,6 @@
 
-// let defaultUrl = "https://mangoblogger.com/accounts/profile/api/"
-let defaultUrl = "http://127.0.0.1:8000/accounts/profile/api/"
+let defaultUrl = "https://mangoblogger.com/accounts/profile/api/"
+// let defaultUrl = "http://127.0.0.1:8000/accounts/profile/api/"
 
 window.onload = (() => {
 

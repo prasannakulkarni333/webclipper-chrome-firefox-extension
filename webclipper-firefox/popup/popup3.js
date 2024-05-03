@@ -13,46 +13,47 @@ function messageElement() {
 
 
 function sendCurrentTabUrl(tabUrl, pageTitle, button) {
-    var apiKey;
-    apiKey = browser.storage.local.get("apiKey").then(data => {
-        return data.apiKey;
-    });
-
-    let targetUrl = button.dataset.url;
+    browser.storage.local.get("apiKey").then(data => {
+        var apiKey;
+        apiKey = data.apiKey;
+        let targetUrl = button.dataset.url;
 
 
-    /*
-    * Make a request to send the URL. Server should support CORS (i.e.
-    * include response header Access-Control-Allow-Origin), otherwise firefox
-    * prevents our code from accessing the response.
-    */
+        /*
+        * Make a request to send the URL. Server should support CORS (i.e.
+        * include response header Access-Control-Allow-Origin), otherwise firefox
+        * prevents our code from accessing the response.
+        */
 
-    messageElement().classList.remove("hidden");
-    messageElement().innerText = "Sent...";
+        messageElement().classList.remove("hidden");
+        messageElement().innerText = "Sent...";
 
-    button.setAttribute('disabled', true);
+        button.setAttribute('disabled', true);
 
-    /*
-    * The targetUrl is the template that's used in the GET request
-    * to the target server. The tokens {URL} and {TITLE} will be
-    * replaced by the URL and title of the tab. The values MUST
-    * be encoded.
-    */
-    let requestUrl = targetUrl
-        .replace('{TITLE}', encodeURIComponent(pageTitle))
-        .replace('{URL}', encodeURIComponent(tabUrl))
-        .replace('{api-key}', encodeURIComponent(apiKey));
+        /*
+        * The targetUrl is the template that's used in the GET request
+        * to the target server. The tokens {URL} and {TITLE} will be
+        * replaced by the URL and title of the tab. The values MUST
+        * be encoded.
+        */
+        let requestUrl = targetUrl
+            .replace('{TITLE}', encodeURIComponent(pageTitle))
+            .replace('{URL}', encodeURIComponent(tabUrl))
+            .replace('{api-key}', encodeURIComponent(apiKey));
 
-    console.log('Sending222: ', tabUrl, 'via', requestUrl);
+        console.log('Sending222: ', tabUrl, 'via', requestUrl);
 
-    fetch(requestUrl,
-        {
-            method: 'POST',
-            mode: 'cors', // no-cors, *cors, same-origin. See Request.mode
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'omit', // include, *same-origin, omit
-        }
-    )
+        fetch(requestUrl,
+            {
+                method: 'POST',
+                mode: 'cors', // no-cors, *cors, same-origin. See Request.mode
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'omit', // include, *same-origin, omit
+            }
+
+        )
+    })
+
         .then((response) => {
             if (response.status === 200) {
                 messageElement().innerText = "URL was sent successfully.";
