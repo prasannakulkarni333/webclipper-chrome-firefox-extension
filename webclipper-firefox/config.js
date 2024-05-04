@@ -5,8 +5,8 @@ let defaultUrl = "https://mangoblogger.com/accounts/profile/api/"
 window.onload = (() => {
 
     const defaultUrls = [
-        { name: 'Save for reading later', url: `${defaultUrl}?url={URL}&association_type=toread&API_KEY={api-key}` },
-        { name: 'Star the page', url: `${defaultUrl}?url={URL}&association_type=starred&API_KEY={api-key}` },
+        { name: 'Save for reading later', url: `${defaultUrl}?url={URL}&association_type=BROWSED&API_KEY={api-key}` },
+        { name: 'Star the page', url: `${defaultUrl}?url={URL}&association_type=STARRED&API_KEY={api-key}` },
     ];
 
     let options = { targetUrls: defaultUrls };
@@ -91,7 +91,7 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         url.username = '';
         taburl = url.href;
         let pageTitle = tab.title;
-        AutoSentCurrentTabUrl(taburl, pageTitle, `${defaultUrl}?page={URL}&API_KEY={api-key}`);
+        AutoSentCurrentTabUrl(taburl, pageTitle, `${defaultUrl}?page={URL}&API_KEY={api-key}&association_type=BROWSED`);
     }
 });
 

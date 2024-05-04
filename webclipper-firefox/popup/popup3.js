@@ -42,13 +42,20 @@ function sendCurrentTabUrl(tabUrl, pageTitle, button) {
             .replace('{api-key}', encodeURIComponent(apiKey));
 
         console.log('Sending222: ', tabUrl, 'via', requestUrl);
+        let requestData = {
+            "page": tabUrl,
+            "API_KEY": apiKey,
+            "title": pageTitle
 
+        }
         fetch(requestUrl,
             {
                 method: 'POST',
                 mode: 'cors', // no-cors, *cors, same-origin. See Request.mode
                 cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
                 credentials: 'omit', // include, *same-origin, omit
+                body: JSON.stringify(requestData),
+
             }
 
         )
