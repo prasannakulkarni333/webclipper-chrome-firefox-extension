@@ -1,0 +1,25 @@
+{
+    "name": "Hello Extensions",
+    "description": "Base Level Extension",
+    "version": "1.0",
+    "manifest_version": 3,
+    "background": {
+        "scripts": [
+            "config.js"
+        ]
+    },
+    "permissions": [
+        "activeTab",
+        "storage",
+        "webNavigation",
+        "tabs"
+    ],
+    "action": {
+        "default_popup": "popup/popup3.html",
+        "default_icon": {
+            "16": "icons/send-tab-url-icon.png",
+            "48": "icons/send-tab-url-icon.png",
+            "128": "icons/send-tab-url-icon.png"
+        }
+    }
+}
